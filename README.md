@@ -44,8 +44,8 @@ No permission is used for anything beyond what's listed above — you can verify
 ## Building
 
 ```bash
-git clone https://github.com/<your-username>/touch-control.git
-cd touch-control
+git clone https://github.com/iamnaimul/touchcontrol.git
+cd touchcontrol
 ```
 
 Open the project in Android Studio and run it on a device or emulator, or build from the command line:
@@ -67,10 +67,6 @@ Touch Control has no `INTERNET` permission and makes no network calls. Nothing i
 - Accessibility Service usage needs a Play Console policy declaration before this can be published on the Play Store (see note above).
 - Not yet tested on large screens (tablets/foldables) under Android 16's relaxed orientation-lock behavior.
 - No automated tests yet.
-
-## License
-
-No license has been chosen yet. Consider adding a `LICENSE` file (MIT is a common, permissive default for a project like this) before making the repo public, so others know what they're allowed to do with the code.
 
 ## Author
 
