@@ -1,73 +1,298 @@
 # Touch Control
 
-**An invisible, full-screen gesture layer for volume, brightness, screen lock, and the power menu — built for phones with a broken, worn-out, or hard-to-reach hardware button.**
+### Control your Android phone with simple screen gestures.
 
-Touch Control replaces the physical buttons with swipes and taps on the screen itself. No visible UI sits on top of your apps — the control layer is fully transparent and only intercepts touches while it's active.
+**Touch Control** is a lightweight Android utility that replaces difficult-to-reach or worn-out physical buttons with an **invisible, full-screen gesture layer**.
 
-## Features
+Adjust volume, change screen brightness, lock the screen, or open the system power menu — without placing visible controls over your apps.
 
-| Gesture | Action |
-|---|---|
-| Swipe up / down | Volume up / down |
-| Swipe left / right | Brightness down / up |
-| Double-tap | Lock the screen |
-| Long-press | Open the power menu (reboot / power off / emergency) |
+<p align="center">
+  <a href="https://github.com/iamnaimul/TouchControl">
+    <img src="https://img.shields.io/badge/GitHub-Repository-black?style=for-the-badge&logo=github" alt="GitHub Repository">
+  </a>
+  <img src="https://img.shields.io/badge/Android-9%2B-green?style=for-the-badge&logo=android" alt="Android 9+">
+  <img src="https://img.shields.io/badge/Offline-100%25-blue?style=for-the-badge" alt="100% Offline">
+  <img src="https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge" alt="MIT License">
+</p>
 
-- Vertical and horizontal gestures are axis-locked per gesture — a single swipe controls *either* volume *or* brightness, never both, so there's no accidental cross-triggering.
-- The overlay auto-dismisses after 2 seconds of inactivity, and immediately when you leave the app.
-- 100% offline. No network permission, no analytics, no data collection of any kind.
+---
 
-## How it works
+## 📱 Overview
 
-The app draws a transparent, full-screen `WindowManager` overlay and reads raw touch events off it. There's no visible button or handle — the entire screen becomes the control surface for as long as the overlay is up.
+Physical buttons can become difficult to use because of wear, damage, poor placement, or accessibility needs.
 
-## Permissions — and why each one is needed
+**Touch Control** turns the screen itself into a temporary control surface.
 
-This app requests a few sensitive-looking permissions. Here's exactly what each one is for and nothing more:
+The application uses a transparent `WindowManager` overlay to capture touch gestures while remaining visually invisible. There are no floating buttons, handles, or permanent controls covering your screen.
 
-| Permission | Why it's needed |
-|---|---|
-| `SYSTEM_ALERT_WINDOW` | Draws the invisible, full-screen touch-capture layer. |
-| `WRITE_SETTINGS` | Changes system volume and screen brightness directly from a gesture. |
-| Device Admin (`force-lock` policy only) | Powers the double-tap-to-lock gesture via `DevicePolicyManager.lockNow()`. No other device admin policy is requested. |
-| Accessibility Service | Used *only* to call `performGlobalAction(GLOBAL_ACTION_POWER_DIALOG)` for the long-press gesture. It does not read screen content (`canRetrieveWindowContent="false"`) and does not listen to accessibility events. |
+### The result
 
-No permission is used for anything beyond what's listed above — you can verify this directly in `MainActivity.kt`, `PowerAccessibilityService.kt`, and `LockAdminReceiver.kt`.
+**Touch → Gesture → System action**
 
-> **Note on Google Play:** using the Accessibility API for anything other than assisting users with disabilities falls outside Google Play's normal accessibility-tool policy. If you plan to publish this on the Play Store, you'll need to frame and declare it (with the required justification/video) as an assistive tool for users who can't use a physical button — this is a store-listing/policy step, not a code change.
+Simple, fast, and distraction-free.
 
-## Requirements
+---
 
-- Android 9.0 (API 28) or higher
-- Android Studio (Gradle and the Android Gradle Plugin are managed by the wrapper/project config)
+## ✨ Features
 
-## Building
+| Gesture         | Action                     |
+| --------------- | -------------------------- |
+| 👆 Swipe Up     | Increase volume            |
+| 👇 Swipe Down   | Decrease volume            |
+| 👉 Swipe Right  | Increase brightness        |
+| 👈 Swipe Left   | Decrease brightness        |
+| 👆👆 Double Tap | Lock the screen            |
+| ✋ Long Press    | Open the system power menu |
+
+### 🎯 Smart Gesture Detection
+
+Volume and brightness gestures are **axis-locked**.
+
+A vertical swipe controls **volume**.
+
+A horizontal swipe controls **brightness**.
+
+This prevents a single gesture from accidentally triggering both controls and keeps the interaction predictable.
+
+### ⚡ Automatic Dismissal
+
+The gesture layer automatically disappears after a short period of inactivity and is dismissed immediately when you leave the app.
+
+### 🔒 Privacy First
+
+Touch Control is designed to work completely offline.
+
+* No internet permission
+* No analytics
+* No advertising
+* No account
+* No cloud service
+* No data collection
+* No network communication
+
+Your data stays on your device.
+
+---
+
+## 🧩 How It Works
+
+Touch Control creates a transparent, full-screen Android `WindowManager` overlay.
+
+While the control layer is active:
+
+1. Touch events are captured from the screen.
+2. The gesture direction is detected.
+3. The gesture is classified as vertical or horizontal.
+4. The corresponding system action is performed.
+5. The overlay automatically dismisses after inactivity.
+
+There is no visible control panel sitting on top of your applications.
+
+---
+
+## 🔐 Permissions
+
+Touch Control requires several Android permissions because it interacts directly with system-level functions.
+
+| Permission            | Purpose                                       |
+| --------------------- | --------------------------------------------- |
+| `SYSTEM_ALERT_WINDOW` | Creates the invisible full-screen touch layer |
+| `WRITE_SETTINGS`      | Allows volume and brightness control          |
+| Device Admin          | Enables the double-tap screen-lock gesture    |
+| Accessibility Service | Opens the Android system power menu           |
+
+### Accessibility Privacy
+
+The Accessibility Service is used **only** to invoke the Android global power dialog.
+
+It does **not**:
+
+* Read screen content
+* Retrieve window content
+* Monitor accessibility events
+* Collect user information
+
+The service explicitly disables window-content retrieval.
+
+You can inspect the implementation in:
+
+* `MainActivity.kt`
+* `PowerAccessibilityService.kt`
+* `LockAdminReceiver.kt`
+
+---
+
+## 🚀 Requirements
+
+* **Android 9.0 (API 28) or higher**
+* Android Studio
+* Android SDK
+* Gradle Wrapper included with the project
+
+---
+
+## 🛠️ Build From Source
+
+### 1. Clone the repository
 
 ```bash
-git clone https://github.com/iamnaimul/touchcontrol.git
-cd touchcontrol
+git clone https://github.com/iamnaimul/TouchControl.git
 ```
 
-Open the project in Android Studio and run it on a device or emulator, or build from the command line:
+### 2. Enter the project directory
+
+```bash
+cd TouchControl
+```
+
+### 3. Open in Android Studio
+
+Open the project directory in Android Studio and allow Gradle to synchronize.
+
+### 4. Build the debug APK
+
+Linux/macOS:
 
 ```bash
 ./gradlew assembleDebug
 ```
 
-## First-time setup
+Windows:
 
-On first launch, the app walks you through granting the four permissions above, one at a time. Once all four are granted, the gesture layer activates automatically every time you open the app.
+```bat
+gradlew.bat assembleDebug
+```
 
-## Privacy
+The generated APK will be available under:
 
-Touch Control has no `INTERNET` permission and makes no network calls. Nothing is collected, logged, or transmitted. The only persisted state is a single boolean (whether one-time setup is complete), stored locally in `SharedPreferences`.
+```text
+app/build/outputs/apk/debug/
+```
 
-## Known limitations / roadmap
+---
 
-- Accessibility Service usage needs a Play Console policy declaration before this can be published on the Play Store (see note above).
-- Not yet tested on large screens (tablets/foldables) under Android 16's relaxed orientation-lock behavior.
-- No automated tests yet.
+## ⚙️ First-Time Setup
 
-## Author
+On the first launch, Touch Control guides you through the required permissions.
 
-Naimul
+The setup process requests each permission individually.
+
+Once the required permissions are granted, the gesture layer becomes available automatically whenever the application is opened.
+
+---
+
+## 🔋 Lightweight by Design
+
+Touch Control is designed to remain simple and lightweight.
+
+The application does not require:
+
+* A backend
+* Internet access
+* Cloud synchronization
+* User accounts
+* Remote services
+* Continuous data processing
+
+Only minimal local state is stored to remember whether the initial setup has been completed.
+
+---
+
+## 🛡️ Privacy
+
+Privacy is a core design principle of Touch Control.
+
+The application does not request the Android `INTERNET` permission and does not make network requests.
+
+No personal information is collected, transmitted, or stored remotely.
+
+The only persistent application state is the local setup-completion status stored using Android `SharedPreferences`.
+
+---
+
+## 📌 Current Limitations
+
+The project is still under development.
+
+Current limitations include:
+
+* Accessibility Service usage requires appropriate policy declaration if distributed through Google Play.
+* Large-screen devices such as tablets and foldables have not yet been fully tested.
+* Automated tests have not yet been implemented.
+
+---
+
+## 🗺️ Roadmap
+
+Future improvements may include:
+
+* [ ] More gesture customization
+* [ ] Adjustable gesture sensitivity
+* [ ] Improved tablet and foldable support
+* [ ] More device compatibility testing
+* [ ] Automated testing
+* [ ] Additional accessibility improvements
+* [ ] Further performance optimization
+
+---
+
+## 📂 Project Structure
+
+```text
+TouchControl/
+├── app/
+│   └── src/
+├── gradle/
+│   └── wrapper/
+├── build.gradle.kts
+├── settings.gradle.kts
+├── gradle.properties
+├── gradlew
+├── gradlew.bat
+├── LICENSE
+└── README.md
+```
+
+---
+
+## 📸 Screenshots
+
+> Screenshots can be added here to demonstrate the setup process and gesture controls.
+
+```text
+Coming soon
+```
+
+---
+
+## 📄 License
+
+Touch Control is released under the **MIT License**.
+
+See the [`LICENSE`](LICENSE) file for the complete license text.
+
+---
+
+## 👨‍💻 Author
+
+**Naimul Hassan**
+
+Teacher • Developer • Technology Enthusiast
+
+GitHub: [@iamnaimul](https://github.com/iamnaimul)
+
+YouTube: [DORPON](https://www.youtube.com/c/DORPON)
+
+---
+
+## ⭐ Support the Project
+
+If you find **Touch Control** useful, consider giving the repository a ⭐ on GitHub.
+
+Your support helps encourage further development and improvements.
+
+<p align="center">
+
+**Built with ❤️ by Naimul**
+
+</p>
